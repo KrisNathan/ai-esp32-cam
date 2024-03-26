@@ -40,8 +40,11 @@
 #include "web.hpp"
 
 // Replace with your network credentials
-const char* SSID = "TPI NETWORK";
-const char* PASSWORD = "privater362000";
+const char* STA_SSID = "TPI NETWORK";
+const char* STA_PASSWORD = "privater362000";
+
+const char* AP_SSID = "aecam";
+const char* AP_PASSWORD = "1234567";
 
 // Create AsyncWebServer object on port 80
 AsyncWebServer server(80);
@@ -53,11 +56,14 @@ void setup() {
   // Serial port for debugging purposes
   Serial.begin(115200);
 
-  // if (!WiFi.softAP(SSID, PASSWORD))
-  //   Serial.println("Failed setting up WiFi AP.");
-  // IPAddress IP = WiFi.softAPIP();
-  // Serial.printf("WiFi AP Address: %s\n", IP);
-  WiFi.begin(SSID, PASSWORD);
+  WiFi.mode(WIFI_AP_STA);
+
+  if (!WiFi.softAP(AP_SSID, AP_PASSWORD))
+    Serial.println("Failed setting up WiFi AP.");
+  IPAddress IP = WiFi.softAPIP();
+  Serial.printf("WiFi AP Address: %s\n", IP);
+
+  WiFi.begin(STA_SSID, STA_PASSWORD);
   while (WiFi.status() != WL_CONNECTED) {
     delay(1000);
     Serial.print("Connecting to WiFi...: ");
