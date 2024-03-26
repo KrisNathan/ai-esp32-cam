@@ -43,7 +43,7 @@ const char index_html[] PROGMEM = R"rawliteral(
 </script>
 </html>)rawliteral";
 
-void setup_server(AsyncWebServer *server, bool *take_photo_state) {
+void setup_server(AsyncWebServer *server, bool *take_photo_state, char* sta_ssid, char* sta_password) {
   server->serveStatic("/", SPIFFS, "/").setDefaultFile("index.html").setAuthentication("user", "pass");;
   
   // server->on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
@@ -81,6 +81,11 @@ void setup_server(AsyncWebServer *server, bool *take_photo_state) {
   //   request->send(SPIFFS, FILE_PHOTO, "image/jpg", false);
   // });
 
+  // why I'm using GET for things that are supposed to use POST:
+  // html forms POST by default uses body json
+  // adding json support would mean more code for the esp
+  // custom html form implementation also adds up length to the html file
+
   server->on("/api/wifi", HTTP_GET, [](AsyncWebServerRequest* request) {
     const char* ssid = "hi";
     const char* pw = "hi";
@@ -90,6 +95,10 @@ void setup_server(AsyncWebServer *server, bool *take_photo_state) {
 
     AsyncWebServerResponse *response = request->beginResponse(200, "text/json", json);
     request->send(response);
+  });
+
+  server->on("/api/wifi", HTTP_POST, [](AsyncWebServerRequest* request) {
+
   });
 
   server->on("/api/wifi_status", HTTP_GET, [](AsyncWebServerRequest* request) {

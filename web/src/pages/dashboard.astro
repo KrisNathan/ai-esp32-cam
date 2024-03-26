@@ -1,4 +1,5 @@
 ---
+import Alert from "../components/Alert.astro";
 import Button from "../components/Button.astro";
 import Card from "../components/Card.astro";
 import CardTitle from "../components/CardTitle.astro";
@@ -22,6 +23,8 @@ import Layout from "../layouts/Layout.astro";
         <PasswordBox />
         <Button id="save-btn">Save</Button>
       </form>
+      <Alert type="success" id="alert-success">Success</Alert>
+      <Alert type="error" id="alert-error">Error</Alert>
     </Card>
   </Center>
 </Layout>
@@ -30,6 +33,23 @@ import Layout from "../layouts/Layout.astro";
   const wifiForm = document.getElementById("wifi-form") as HTMLFormElement;
   const ssid = document.getElementById("ssid") as HTMLInputElement;
   const password = document.getElementById("password") as HTMLInputElement;
+  const successAlert = document.getElementById(
+    "alert-success"
+  ) as HTMLDivElement;
+  const errorAlert = document.getElementById("alert-error") as HTMLDivElement;
+
+  successAlert.hidden = true;
+  errorAlert.hidden = true;
+
+  const sendSuccessAlert = (msg: string) => {
+    successAlert.innerText = msg;
+    successAlert.hidden = false;
+  };
+
+  const sendErrorAlert = (msg: string) => {
+    errorAlert.innerText = msg;
+    errorAlert.hidden = false;
+  };
 
   fetch("/api/wifi")
     .then((d) => d.json())
@@ -37,10 +57,28 @@ import Layout from "../layouts/Layout.astro";
       ssid.value = data.ssid;
       password.value = data.pw;
     })
-    .catch((e) => console.error(e));
+    .catch((e) => {
+      console.error(e);
+      sendErrorAlert("Failed to fetch current SSID and Password");
+    });
 
   wifiForm.addEventListener("submit", (e) => {
     e.preventDefault();
+    const params = new URLSearchParams({
+      ssid: ssid.value,
+      pw: password.value,
+    });
+    fetch(`/api/wifi?${params}`, {
+      method: "POST",
+    })
+      .then((d) => d.text())
+      .then((d) => {
+        sendSuccessAlert("Successfully set WiFi settings");
+      })
+      .catch((e) => {
+        console.error(e);
+        sendErrorAlert("Failed to set WiFi settings");
+      });
     console.log("set wifi");
   });
 

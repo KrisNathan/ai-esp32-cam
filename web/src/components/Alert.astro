@@ -1,0 +1,17 @@
+---
+interface Props {
+  type: "success" | "error";
+  id: string;
+}
+const { type, id } = Astro.props;
+---
+
+<div
+  id={id}
+  class:list={[
+    "rounded-xl text-black dark:text-white p-5 font-bold ring ring-offset-2",
+    type == "error" ? "ring-red-500 bg-red-500 dark:ring-pink-500 dark:bg-pink-500" : "ring-green-600 bg-green-600"
+  ]}
+>
+  <slot />
+</div>

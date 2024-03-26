@@ -43,6 +43,9 @@
 const char* STA_SSID = "TPI NETWORK";
 const char* STA_PASSWORD = "privater362000";
 
+char sta_ssid[64]; // 32 char * 2
+char sta_password[128]; // 64 char * 2
+
 const char* AP_SSID = "aecam";
 const char* AP_PASSWORD = "1234567890";
 
@@ -103,7 +106,13 @@ void setup() {
   web::setup_server(&server, &takeNewPhoto);
 }
 
+bool retryingWiFi = false;
+
 void loop() {
+  if (WiFi.status() == WL_CONNECTION_LOST) {
+    retryingWiFi = true;
+  }
+
   if (takeNewPhoto) {
     capture_photo_save_spiffs();
     takeNewPhoto = false;
