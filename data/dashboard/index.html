@@ -1,0 +1,11 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="description" content="Astro description"><meta name="viewport" content="width=device-width"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="generator" content="Astro v4.5.9"><title>Dashboard - Ecam</title><link rel="stylesheet" href="/_astro/dashboard.3-hdSHnp.css"><script type="module">const t=document.getElementById("wifi-form"),s=document.getElementById("ssid"),n=document.getElementById("password");fetch("/api/wifi").then(e=>e.json()).then(e=>{s.value=e.ssid,n.value=e.pw}).catch(e=>console.error(e));t.addEventListener("submit",e=>{e.preventDefault(),console.log("set wifi")});
+</script></head> <body>  <div class="flex h-screen"> <div class="m-auto">  <h1 class="text-black dark:text-white text-4xl font-extrabold text-center my-5"> Dashboard </h1> <div class="bg-white dark:bg-slate-800 rounded-lg px-6 py-8 ring-1 ring-slate-900/5 shadow-xl flex flex-col space-y-5 drop-shadow-md">  <h1 class="text-black dark:text-white text-2xl font-bold text-center my-5"> WiFi </h1> <form class="space-y-5" id="wifi-form"> <input type="text" id="ssid" name="ssid" placeholder="SSID" class="appearance-none p-5 text-center w-full rounded-xl bg-white dark:bg-slate-900 text-black dark:text-white shadow-inner"> <input type="password" id="password" name="password" placeholder="PASSWORD" class="appearance-none p-5 text-center w-full rounded-xl bg-white dark:bg-slate-900 text-black dark:text-white shadow-inner"> <div class="flex space-x-2 text-black dark:text-white"> <input type="checkbox" onclick="showPassword()"> <div>Show Password</div> </div> <script>
+  function showPassword() {
+    var x = document.getElementById("password");
+    if (x.type === "password") {
+      x.type = "text";
+    } else {
+      x.type = "password";
+    }
+  }
+</script> <button class="appearance-none p-5 text-center w-full rounded-xl bg-blue-600 text-white pointer hover:bg-blue-700 active:bg-blue-800 font-bold" id="save-btn"> Save </button> </form>  </div>  </div> </div>  </body></html> 

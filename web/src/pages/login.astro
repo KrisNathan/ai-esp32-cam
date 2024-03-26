@@ -1,0 +1,49 @@
+---
+import Card from "../components/Card.astro";
+import TextBox from "../components/TextBox.astro";
+import Button from "../components/Button.astro";
+import Title from "../components/Title.astro";
+import Layout from "../layouts/Layout.astro";
+import Center from "../components/Center.astro";
+---
+
+<Layout title="Login - Ecam Dashboard">
+  <Center>
+    <Card>
+      <Title>Login</Title>
+      <form class="space-y-5" action="/api/login">
+        <TextBox
+          type="text"
+          id="username"
+          name="user"
+          placeholder="Username"
+        />
+        <TextBox
+          type="password"
+          id="password"
+          name="pw"
+          placeholder="Password"
+        />
+        <Button id="fart">Login</Button>
+      </form>
+    </Card>
+  </Center>
+</Layout>
+
+<script>
+  // const loginForm = document.getElementById("login-form") as HTMLFormElement;
+  // const username = document.getElementById("username") as HTMLInputElement;
+  // const password = document.getElementById("password") as HTMLInputElement;
+  // function onSubmit(e: SubmitEvent) {
+  //   e.preventDefault();
+  //   const params = new URLSearchParams({
+  //     user: username.value,
+  //     pw: password.value,
+  //   });
+  //   fetch(`/login?${params}`, {
+  //     method: "POST",
+  //   }).catch((e) => {
+  //     console.error(e);
+  //   });
+  // };
+</script>

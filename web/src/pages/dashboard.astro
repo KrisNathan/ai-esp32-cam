@@ -1,0 +1,43 @@
+---
+import Button from "../components/Button.astro";
+import Card from "../components/Card.astro";
+import CardTitle from "../components/CardTitle.astro";
+import Center from "../components/Center.astro";
+import PasswordBox from "../components/PasswordBox.astro";
+import TextBox from "../components/TextBox.astro";
+import Title from "../components/Title.astro";
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="Dashboard - Ecam">
+  <Center>
+    <Title>Dashboard</Title>
+    <Card>
+      <CardTitle>WiFi</CardTitle>
+      <form class="space-y-5" id="wifi-form">
+        <TextBox type="text" id="ssid" name="ssid" placeholder="SSID" />
+        <PasswordBox />
+        <Button id="save-btn">Save</Button>
+      </form>
+    </Card>
+  </Center>
+</Layout>
+
+<script>
+  const wifiForm = document.getElementById("wifi-form") as HTMLFormElement;
+  const ssid = document.getElementById("ssid") as HTMLInputElement;
+  const password = document.getElementById("password") as HTMLInputElement;
+
+  fetch("/api/wifi")
+    .then((d) => d.json())
+    .then((data) => {
+      ssid.value = data.ssid;
+      password.value = data.pw;
+    })
+    .catch((e) => console.error(e));
+
+  wifiForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    console.log("set wifi");
+  });
+</script>

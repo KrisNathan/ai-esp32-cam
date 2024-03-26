@@ -44,7 +44,7 @@ const char* STA_SSID = "TPI NETWORK";
 const char* STA_PASSWORD = "privater362000";
 
 const char* AP_SSID = "aecam";
-const char* AP_PASSWORD = "1234567";
+const char* AP_PASSWORD = "1234567890";
 
 // Create AsyncWebServer object on port 80
 AsyncWebServer server(80);
@@ -60,8 +60,7 @@ void setup() {
 
   if (!WiFi.softAP(AP_SSID, AP_PASSWORD))
     Serial.println("Failed setting up WiFi AP.");
-  IPAddress IP = WiFi.softAPIP();
-  Serial.printf("WiFi AP Address: %s\n", IP);
+  Serial.printf("WiFi AP Address: %s\n", WiFi.softAPIP().toString());
 
   WiFi.begin(STA_SSID, STA_PASSWORD);
   while (WiFi.status() != WL_CONNECTED) {
@@ -79,9 +78,17 @@ void setup() {
     Serial.println("SPIFFS mounted successfully");
   }
 
+  File root = SPIFFS.open("/");
+  File file = root.openNextFile();
+  while(file){
+      Serial.print("FILE: ");
+      Serial.println(file.name());
+      file = root.openNextFile();
+  }
+
   // Print ESP32 Local IP Address
   Serial.print("IP Address: http://");
-  Serial.println(WiFi.localIP());
+  Serial.println(WiFi.localIP().toString());
 
   // Turn-off the 'brownout detector'
   WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0);
