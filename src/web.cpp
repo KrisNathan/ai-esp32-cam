@@ -81,20 +81,6 @@ void setup_server(AsyncWebServer *server, bool *take_photo_state) {
   //   request->send(SPIFFS, FILE_PHOTO, "image/jpg", false);
   // });
 
-  // server->on("/api/login", HTTP_GET, [](AsyncWebServerRequest* request) {
-
-  //   String username = request->getParam("user")->value();
-  //   String password = request->getParam("pw")->value();
-  //   if (username == DEFAULT_USERNAME && password == DEFAULT_PASSWORD) {
-  //     AsyncWebServerResponse *response = request->beginResponse(200, "text/plain", "Hello World!");
-  //     response->addHeader("Set-Cookie", build_cookie("user", DEFAULT_USERNAME));
-  //     response->addHeader("Set-Cookie", build_cookie("pw", DEFAULT_PASSWORD));
-  //     request->send(response);
-  //     return;
-  //   }
-  //   request->send_P(401, "text/plain", "Invalid username or password");
-  // });
-
   server->on("/api/wifi", HTTP_GET, [](AsyncWebServerRequest* request) {
     const char* ssid = "hi";
     const char* pw = "hi";
@@ -106,18 +92,38 @@ void setup_server(AsyncWebServer *server, bool *take_photo_state) {
     request->send(response);
   });
 
+  server->on("/api/wifi_status", HTTP_GET, [](AsyncWebServerRequest* request) {
+    char status[4];
+    switch(WiFi.status()){
+      case WL_NO_SHIELD:
+        strcpy(status, "255");
+        break;
+      case WL_IDLE_STATUS:
+        strcpy(status, "0");
+        break;      
+      case WL_NO_SSID_AVAIL:
+        strcpy(status, "1");
+        break;    
+      case WL_SCAN_COMPLETED:
+        strcpy(status, "2");
+        break;   
+      case WL_CONNECTED:
+        strcpy(status, "3");
+        break;        
+      case WL_CONNECT_FAILED:
+        strcpy(status, "4");
+        break;   
+      case WL_CONNECTION_LOST:
+        strcpy(status, "5");
+        break;  
+      case WL_DISCONNECTED:
+        strcpy(status, "6");
+        break;
+    }
+    request->send_P(200, "text/plain", status);
+  });
+
   server->begin();
-}
-
-char* build_cookie(char* key, char* value) {
-  char buf[512]; // this is more than sufficient.
-  snprintf(buf, 512 * sizeof(char), "%s=%s; max-age=3600; HttpOnly", key, value);
-  return buf;
-}
-
-void authenticate(AsyncWebServerRequest* request) {
-  auto c = request->getHeader("Cookie");
-  Serial.println(c->value());
 }
 
 void loop_server() {}

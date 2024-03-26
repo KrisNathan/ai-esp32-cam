@@ -14,6 +14,9 @@ import Layout from "../layouts/Layout.astro";
     <Title>Dashboard</Title>
     <Card>
       <CardTitle>WiFi</CardTitle>
+      <div class="flex text-black dark:text-white">
+        Status:&nbsp;<div id="wifi-status"></div>
+      </div>
       <form class="space-y-5" id="wifi-form">
         <TextBox type="text" id="ssid" name="ssid" placeholder="SSID" />
         <PasswordBox />
@@ -40,4 +43,49 @@ import Layout from "../layouts/Layout.astro";
     e.preventDefault();
     console.log("set wifi");
   });
+
+  const wifiStatusDiv = document.getElementById(
+    "wifi-status"
+  ) as HTMLDivElement;
+  let wifiStatus = "N/A";
+  setInterval(() => {
+    fetch("/api/wifi_status")
+      .then((d) => d.text())
+      .then((data) => {
+        switch (parseInt(data)) {
+          case 255:
+            wifiStatus = "No Shield";
+            break;
+          case 0:
+            wifiStatus = "Connecting";
+            break;
+          case 1:
+            wifiStatus = "No SSID Available";
+            break;
+          case 2:
+            wifiStatus = "Scan Completed";
+            break;
+          case 3:
+            wifiStatus = "Connected";
+            break;
+          case 4:
+            wifiStatus = "Connect Failed";
+            break;
+          case 5:
+            wifiStatus = "Connection Lost";
+            break;
+          case 6:
+            wifiStatus = "Disconnected";
+            break;
+          default:
+            wifiStatus = "Error Fetching Status";
+            break;
+        }
+        wifiStatusDiv.innerText = wifiStatus;
+      })
+      .catch((e) => {
+        console.error(e);
+        wifiStatusDiv.innerText = "Error Fetching Status";
+      });
+  }, 1000);
 </script>
