@@ -82,11 +82,20 @@ import Layout from "../layouts/Layout.astro";
     console.log("set wifi");
   });
 
+  let isOutOfFocus = false;
+  window.onblur = (e) => {
+    isOutOfFocus = true;
+  }
+  window.onfocus = (e) => {
+    isOutOfFocus = false;
+  }
+
   const wifiStatusDiv = document.getElementById(
     "wifi-status"
   ) as HTMLDivElement;
   let wifiStatus = "N/A";
   setInterval(() => {
+    if (isOutOfFocus) return;
     fetch("/api/wifi_status")
       .then((d) => d.text())
       .then((data) => {
