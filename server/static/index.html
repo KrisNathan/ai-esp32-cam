@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Chat</title>
+  </head>
+  <body>
+    <img id="img" src=""/>
+    <script>
+      const img = document.getElementById("img");
+      setInterval(() => {
+        fetch("/img")
+          .then((d) => d.text())
+          .then((d) => {
+            img.src = d.replace(/['"]+/g, '')
+          })
+          .catch((e) => console.error(e));
+      }, 5000);
+    </script>
+  </body>
+</html>
