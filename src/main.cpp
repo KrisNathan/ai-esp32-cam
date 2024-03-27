@@ -38,6 +38,7 @@
 #include <ESPAsyncWebServer.h>
 #include "cam.hpp"
 #include "web.hpp"
+#include "push_img.hpp"
 
 // Replace with your network credentials
 const char* STA_SSID = "TPI NETWORK";
@@ -123,9 +124,10 @@ void loop() {
     previousWiFiStatus = currentWiFiStatus;
   }
 
-  if (takeNewPhoto) {
-    capture_photo_save_spiffs();
-    takeNewPhoto = false;
-  }
-  delay(1000);
+  push_img(capture_photo_base64().c_str());
+  // if (takeNewPhoto) {
+  //   capture_photo_save_spiffs();
+  //   takeNewPhoto = false;
+  // }
+  delay(10000);
 }

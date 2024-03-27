@@ -24,27 +24,39 @@ esp_err_t setup_cam(void) {
   config.xclk_freq_hz = 20000000;
   config.pixel_format = PIXFORMAT_JPEG;
 
-  if (psramFound()) {
-    config.frame_size = FRAMESIZE_UXGA;
-    config.jpeg_quality = 10;
-    config.fb_count = 2;
-  } else {
-    config.frame_size = FRAMESIZE_SVGA;
-    config.jpeg_quality = 12;
-    config.fb_count = 1;
-  }
+  /*
+    FRAMESIZE_UXGA (1600 x 1200)
+    FRAMESIZE_QVGA (320 x 240)
+    FRAMESIZE_CIF (352 x 288)
+    FRAMESIZE_VGA (640 x 480)
+    FRAMESIZE_SVGA (800 x 600)
+    FRAMESIZE_XGA (1024 x 768)
+    FRAMESIZE_SXGA (1280 x 1024)
+  */
+  config.frame_size = FRAMESIZE_VGA;
+  config.jpeg_quality = 12;  // lower = higher res
+  config.fb_count = 1;
+
+  // if (psramFound()) {
+  //   config.frame_size = FRAMESIZE_UXGA;
+  //   config.jpeg_quality = 10;
+  //   config.fb_count = 2;
+  // } else {
+  //   config.frame_size = FRAMESIZE_SVGA;
+  //   config.jpeg_quality = 12;
+  //   config.fb_count = 1;
+  // }
 
   // Camera init
   esp_err_t err = esp_camera_init(&config);
   return err;
 }
 
-
 // Check if photo capture was successful
-bool check_photo( fs::FS &fs ) {
-  File f_pic = fs.open( FILE_PHOTO );
+bool check_photo(fs::FS& fs) {
+  File f_pic = fs.open(FILE_PHOTO);
   unsigned int pic_sz = f_pic.size();
-  return ( pic_sz > 100 );
+  return (pic_sz > 100);
 }
 
 void capture_photo_save_spiffs(void) {
@@ -83,4 +95,19 @@ void capture_photo_save_spiffs(void) {
     // check if file has been correctly saved in SPIFFS
     ok = check_photo(SPIFFS);
   } while (!ok);
+}
+
+String capture_photo_base64(void) {
+  camera_fb_t* fb = esp_camera_fb_get();  // pointer
+
+  if (!fb) {
+    Serial.println("Camera capture failed");
+    return "";
+  }
+
+  String b64 = base64::encode(fb->buf, fb->len);
+  
+  esp_camera_fb_return(fb);
+
+  return b64;
 }

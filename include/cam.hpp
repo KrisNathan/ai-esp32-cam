@@ -6,7 +6,7 @@
 #include <esp32-hal-psram.h>
 #include <SPIFFS.h>
 #include <FS.h>
-
+#include <base64.h>
 
 // Photo File Name to save in SPIFFS
 #define FILE_PHOTO "/photo.jpg"
@@ -33,5 +33,6 @@ esp_err_t setup_cam(void);
 
 bool check_photo(fs::FS &fs);
 void capture_photo_save_spiffs(void);
+String capture_photo_base64(void);
 
 #endif
