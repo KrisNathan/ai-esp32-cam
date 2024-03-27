@@ -43,8 +43,11 @@
 const char* STA_SSID = "TPI NETWORK";
 const char* STA_PASSWORD = "privater362000";
 
-char sta_ssid[64]; // 32 char * 2
-char sta_password[128]; // 64 char * 2
+#define STA_SSID_LEN 64
+#define STA_PASSWORD_LEN 128
+
+char sta_ssid[STA_SSID_LEN] = "TPI NETWORK"; // 32 char * 2
+char sta_password[STA_PASSWORD_LEN] = "privater362000"; // 64 char * 2
 
 const char* AP_SSID = "aecam";
 const char* AP_PASSWORD = "1234567890";
@@ -103,19 +106,26 @@ void setup() {
     ESP.restart();
   }
   
+  web::wifi_get(&server, sta_ssid, sta_password);
+  web::wifi_post(&server, sta_ssid, STA_SSID_LEN, sta_password, STA_PASSWORD_LEN);
   web::setup_server(&server, &takeNewPhoto);
 }
 
-bool retryingWiFi = false;
+wl_status_t previousWiFiStatus = WL_IDLE_STATUS;
+wl_status_t currentWiFiStatus = WL_IDLE_STATUS;
 
 void loop() {
-  if (WiFi.status() == WL_CONNECTION_LOST) {
-    retryingWiFi = true;
+  currentWiFiStatus = WiFi.status();
+  if (currentWiFiStatus != previousWiFiStatus) {
+    if (currentWiFiStatus == WL_CONNECTED) {
+      Serial.printf("IP Address: http://%s\n", WiFi.localIP().toString().c_str());
+    }
+    previousWiFiStatus = currentWiFiStatus;
   }
 
   if (takeNewPhoto) {
     capture_photo_save_spiffs();
     takeNewPhoto = false;
   }
-  delay(1);
+  delay(1000);
 }
