@@ -15,7 +15,7 @@ class Base64Image(BaseModel):
     img: str
 
 @app.post("/image_upload")
-async def create_image_upload(b64img: Base64Image):
+def create_image_upload(b64img: Base64Image):
     im = Image.open(BytesIO(base64.b64decode(b64img.img)))
     results = model.predict(source=im)  # save plotted images
     print(results)
@@ -31,7 +31,7 @@ async def create_image_upload(b64img: Base64Image):
             mfs.write(img_str)
 
 @app.get("/img")
-async def create_image_get():
+def create_image_get():
     txt = ""
     with mem_fs.open('product.txt', 'r') as mfs:
         txt = mfs.read()
