@@ -1,0 +1,7 @@
+version: "3"
+services:
+  server:
+    build: .
+    restart: unless-stopped
+    ports:
+      - 8080:8080 # host: 8080; container: 80080800
