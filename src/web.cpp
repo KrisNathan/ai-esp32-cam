@@ -1,8 +1,8 @@
 #include "web.hpp"
 
 namespace web {
-char* DEFAULT_USERNAME = "user";
-char* DEFAULT_PASSWORD = "user";
+const char* DEFAULT_USERNAME = "user";
+const char* DEFAULT_PASSWORD = "user";
 const char index_html[] PROGMEM = R"rawliteral(
 <!DOCTYPE HTML><html>
 <head>

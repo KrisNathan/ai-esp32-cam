@@ -124,7 +124,7 @@ void loop() {
     previousWiFiStatus = currentWiFiStatus;
   }
 
-  push_img(capture_photo_base64().c_str());
+  push_img(capture_photo_base64());
   // if (takeNewPhoto) {
   //   capture_photo_save_spiffs();
   //   takeNewPhoto = false;
