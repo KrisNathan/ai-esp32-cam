@@ -1,29 +1,3 @@
-// #include <Arduino.h>
-
-// void setup() {
-//   // put your setup code here, to run once:
-//   Serial.begin(115200);
-// }
-
-// void loop() {
-//   // put your main code here, to run repeatedly:
-//   Serial.println("Hello!!!");
-//   delay(1000);
-// }
-
-/*********
-  Rui Santos
-  Complete project details at https://RandomNerdTutorials.com/esp32-cam-take-photo-display-web-server/
-  
-  IMPORTANT!!! 
-   - Select Board "AI Thinker ESP32-CAM"
-   - GPIO 0 must be connected to GND to upload a sketch
-   - After connecting GPIO 0 to GND, press the ESP32-CAM on-board RESET button to put your board in flashing mode
-  
-  The above copyright notice and this permission notice shall be included in all
-  copies or substantial portions of the Software.
-*********/
-
 #include <WiFi.h>
 #include <esp_camera.h>
 #include <esp_timer.h>
