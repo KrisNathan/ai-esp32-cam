@@ -14,7 +14,6 @@ void wifi_get(AsyncWebServer* server, char* sta_ssid, char* sta_password);
 void wifi_post(AsyncWebServer* server, char* sta_ssid,
                unsigned int sta_ssid_len, char* sta_password,
                unsigned int sta_password_len);
-void loop_server();
 }  // namespace web
 
 #endif
