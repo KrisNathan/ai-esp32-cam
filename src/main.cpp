@@ -88,5 +88,5 @@ void loop() {
   if (currentWiFiStatus == WL_CONNECTED) {
     push_img(capture_photo_base64());
   }
-  delay(10000);
+  delay(500);
 }
