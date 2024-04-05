@@ -3,6 +3,6 @@
 
 #include <Arduino.h>
 
-void push_img(String base64_image);
+void push_img(String base64_image, char* rot);
 
 #endif

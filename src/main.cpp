@@ -16,9 +16,11 @@
 
 #define STA_SSID_LEN 64
 #define STA_PASSWORD_LEN 128
+#define ROT_LEN 4
 
 char sta_ssid[STA_SSID_LEN] = "SSID"; // 32 char * 2
 char sta_password[STA_PASSWORD_LEN] = "PASSWORD"; // 64 char * 2
+char rot[ROT_LEN] = "0";
 
 const char* AP_SSID = "aicam";
 const char* AP_PASSWORD = "1234567890";
@@ -70,6 +72,7 @@ void setup() {
   
   web::wifi_get(&server, sta_ssid, sta_password);
   web::wifi_post(&server, sta_ssid, STA_SSID_LEN, sta_password, STA_PASSWORD_LEN);
+  web::rot_post(&server, rot, ROT_LEN);
   web::setup_server(&server, &takeNewPhoto);
 }
 
@@ -86,7 +89,7 @@ void loop() {
   }
 
   if (currentWiFiStatus == WL_CONNECTED) {
-    push_img(capture_photo_base64());
+    push_img(capture_photo_base64(), rot);
   }
   delay(500);
 }

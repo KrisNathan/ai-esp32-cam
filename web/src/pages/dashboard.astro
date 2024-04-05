@@ -23,6 +23,19 @@ import Layout from "../layouts/Layout.astro";
         <PasswordBox />
         <Button id="save-btn">Save</Button>
       </form>
+      <form class="space-y-5" id="rot-form">
+        <div class="flex text-black dark:text-white">Rotation</div>
+        <input
+          type="number"
+          id="rot"
+          name="rot"
+          placeholder="0"
+          min="0"
+          max="360"
+          class="appearance-none p-5 text-center w-full rounded-xl bg-white dark:bg-slate-900 text-black dark:text-white shadow-inner"
+        />
+        <Button id="save-btn">Save</Button>
+      </form>
       <Alert type="success" id="alert-success">Success</Alert>
       <Alert type="error" id="alert-error">Error</Alert>
     </Card>
@@ -37,6 +50,35 @@ import Layout from "../layouts/Layout.astro";
     "alert-success"
   ) as HTMLDivElement;
   const errorAlert = document.getElementById("alert-error") as HTMLDivElement;
+  const rotForm = document.getElementById("rot-form") as HTMLFormElement;
+  const rot = document.getElementById("rot") as HTMLInputElement;
+
+  rotForm?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const params = new URLSearchParams({
+      rot: rot.value,
+    });
+    let failed = false
+    fetch(`/api/rot?${params}`, {
+      method: "POST",
+    })
+      .then((d) => {
+        if (!d.ok) {
+          failed = true
+          sendErrorAlert("Failed to set Rotation settings");
+        }
+        return d.text()
+      })
+      .then((d) => {
+        if (!failed) {
+          sendSuccessAlert("Successfully set Rotation settings");
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+        sendErrorAlert("Failed to set Rotation settings");
+      });
+  });
 
   successAlert.hidden = true;
   errorAlert.hidden = true;
@@ -85,10 +127,10 @@ import Layout from "../layouts/Layout.astro";
   let isOutOfFocus = false;
   window.onblur = (e) => {
     isOutOfFocus = true;
-  }
+  };
   window.onfocus = (e) => {
     isOutOfFocus = false;
-  }
+  };
 
   const wifiStatusDiv = document.getElementById(
     "wifi-status"

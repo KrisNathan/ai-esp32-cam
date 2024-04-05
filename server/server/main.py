@@ -13,10 +13,14 @@ app = FastAPI()
 
 class Base64Image(BaseModel):
     img: str
+    rot: str
 
 @app.post("/image_upload")
 def create_image_upload(b64img: Base64Image):
+    rotation = int(b64img.rot)
+
     im = Image.open(BytesIO(base64.b64decode(b64img.img)))
+    im = im.rotate(rotation, PIL.Image.NEAREST, expand = 1) #rotation
     results = model.predict(source=im)  # save plotted images
     print(results)
     for r in results:

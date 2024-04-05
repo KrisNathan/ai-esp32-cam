@@ -2,9 +2,10 @@
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
 
-void push_img(String base64_image) {
+void push_img(String base64_image, char* rot) {
   JsonDocument doc;
   doc["img"] = base64_image;
+  doc["rot"] = rot;
   String json_string;
   serializeJson(doc, json_string);
   

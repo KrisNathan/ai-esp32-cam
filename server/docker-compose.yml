@@ -3,5 +3,7 @@ services:
   server:
     build: .
     restart: unless-stopped
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
     ports:
       - 8080:8080 # host: 8080; container: 80080800

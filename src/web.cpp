@@ -96,4 +96,28 @@ void wifi_post(AsyncWebServer* server, char* sta_ssid,
              });
 }
 
+void rot_post(AsyncWebServer* server, char* rot, unsigned int rot_len) {
+  server->on(
+      "/api/rot", HTTP_POST, [rot, rot_len](AsyncWebServerRequest* request) {
+        Serial.println("POST /api/rot");
+        
+        if (!(request->hasParam("rot")))
+          return request->send_P(400, "text/plain",
+                                 "Bad request: requires rot parameter");
+
+        String r = request->getParam("rot")->value();
+
+        Serial.println(r);
+
+        if (r.length() > rot_len)
+          return request->send_P(
+              400, "text/plain",
+              "Bad request: rot parameter length overflow");
+
+        r.toCharArray(rot, rot_len);
+
+        return request->send_P(200, "text/plain", "Success");
+      });
+}
+
 }  // namespace web
